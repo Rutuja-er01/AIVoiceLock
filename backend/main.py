@@ -1,12 +1,28 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, UploadFile, File
+import shutil
+import os
+
+from ai.voice_authenticator import authenticate
 
 app = FastAPI()
 
+UPLOAD_FOLDER = "uploads"
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+
 @app.get("/")
 def home():
-    return {"message": "Welcome to VoiceLock AI Backend!"}
+    return {"message": "Voice Authentication API Running"}
 
 
-@app.get("/health")
-def health():
-    return {"status": "Backend is running successfully!"}
+@app.post("/authenticate")
+async def authenticate_user(file: UploadFile = File(...)):
+
+    file_path = os.path.join(UPLOAD_FOLDER, "Recording.mpeg")
+
+    with open(file_path, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+
+    result = authenticate(file_path)
+
+    return result
