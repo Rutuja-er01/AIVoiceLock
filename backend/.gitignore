@@ -1,0 +1,14 @@
+# Virtual environments
+venv/
+venv312/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Temporary files
+temp/
+
+# Test files
+test.wav
+test_register.py

@@ -1,28 +1,68 @@
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI, UploadFile, File, Form
 import shutil
 import os
 
-from ai.voice_authenticator import authenticate
+from register import register_user
+from ai.authenticate import authenticate
+
 
 app = FastAPI()
-
-UPLOAD_FOLDER = "uploads"
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 
 @app.get("/")
 def home():
-    return {"message": "Voice Authentication API Running"}
+    return {
+        "message": "AIVoiceLock API running"
+    }
+
+
+@app.post("/register")
+async def register(
+    username: str = Form(...),
+    passphrase: str = Form(...),
+    audio: UploadFile = File(...)
+):
+
+    os.makedirs("temp", exist_ok=True)
+
+    audio_path = f"temp/{audio.filename}"
+
+    with open(audio_path, "wb") as buffer:
+        shutil.copyfileobj(
+            audio.file,
+            buffer
+        )
+
+
+    result = register_user(
+        username,
+        passphrase,
+        [audio_path]
+    )
+
+
+    return result
+
 
 
 @app.post("/authenticate")
-async def authenticate_user(file: UploadFile = File(...)):
+async def verify(
+    audio: UploadFile = File(...)
+):
 
-    file_path = os.path.join(UPLOAD_FOLDER, "Recording.mpeg")
+    os.makedirs("temp", exist_ok=True)
 
-    with open(file_path, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
+    audio_path = f"temp/{audio.filename}"
 
-    result = authenticate(file_path)
+
+    with open(audio_path, "wb") as buffer:
+        shutil.copyfileobj(
+            audio.file,
+            buffer
+        )
+
+
+    result = authenticate(audio_path)
+
 
     return result
