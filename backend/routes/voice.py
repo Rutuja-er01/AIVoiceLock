@@ -1,6 +1,7 @@
 from fastapi import APIRouter, UploadFile, File, Depends
 from utils.auth_dependency import get_current_user
 from config.database import voice_collection
+from ai.voice_authenticator import authenticate
 import shutil
 import os
 from datetime import datetime, UTC
