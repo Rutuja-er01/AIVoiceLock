@@ -5,7 +5,10 @@
     "testuser": {
         "passphrase": "open the voice lock"
     },
-    "dhanu": {
+    "kitu": {
         "passphrase": "open the voice lock"
+    },
+    "dhanu": {
+        "passphrase": "unlock my laptop"
     }
 }
