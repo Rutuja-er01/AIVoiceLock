@@ -1,13 +1,1140 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>frontend</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI VoiceLock</title>
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="src/App.css">
+</head>
+
+<body>
+
+<!--================ Animated Background ================-->
+
+<div class="background">
+
+    <span class="blob blob1"></span>
+    <span class="blob blob2"></span>
+    <span class="blob blob3"></span>
+
+    <div class="grid"></div>
+
+</div>
+
+<!--================ HEADER ================-->
+
+<header>
+
+    <!-- Keep your existing logo -->
+    <div class="logo">
+
+        <img src="assets/innovatorX.logo.jpng" alt="Logo">
+
+    </div>
+
+    <nav>
+
+        <a href="#">Home</a>
+        <a href="#">Enroll</a>
+        <a href="#">Dashboard</a>
+        <a href="#">Security</a>
+
+    </nav>
+
+</header>
+
+<!--================ HERO SECTION ================-->
+
+<section class="hero">
+
+<div class="hero-left">
+
+<div class="glass-card">
+
+<div class="ai-badge">
+
+AI Powered Authentication
+
+</div>
+
+<h1>
+
+Next Generation
+
+<span>AI Voice Authentication</span>
+
+</h1>
+
+<p>
+
+Authenticate using your unique voice signature powered by
+advanced Artificial Intelligence, Deep Neural Networks
+and Adaptive Biometric Security.
+
+</p>
+
+<div class="hero-buttons">
+
+<button class="primary-btn">
+
+Start Voice Authentication
+
+</button>
+
+<button class="secondary-btn">
+
+Learn More
+
+</button>
+
+</div>
+
+<!--============== Live Status ==============-->
+
+<div class="status-panel">
+
+<div class="status-item">
+
+<h3>Security</h3>
+
+<p class="online">
+
+ACTIVE
+
+</p>
+
+</div>
+
+<div class="status-item">
+
+<h3>AI Accuracy</h3>
+
+<p>
+
+99.98%
+
+</p>
+
+</div>
+
+<div class="status-item">
+
+<h3>Threats</h3>
+
+<p>
+
+0 Detected
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!--================ Right Side AI Animation ================-->
+
+<div class="hero-right">
+
+<div class="ai-core">
+
+<div class="outer-ring"></div>
+
+<div class="middle-ring"></div>
+
+<div class="inner-ring"></div>
+
+<div class="shield">
+
+<div class="voice-bars">
+
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+
+</div>
+
+<div class="lock">
+
+🔒
+
+</div>
+
+</div>
+
+</div>
+
+<div class="floating-card top-card">
+
+AI Detection
+
+<strong>Listening...</strong>
+
+</div>
+
+<div class="floating-card bottom-card">
+
+Voice Match
+
+<strong>99.98%</strong>
+
+</div>
+
+</div>
+
+</section>
+
+<!--================ Feature Cards ================-->
+
+<section class="features">
+
+<div class="feature">
+
+<h2>Neural Voiceprint</h2>
+
+<p>
+
+Creates a unique encrypted biometric voice identity.
+
+</p>
+
+</div>
+
+<div class="feature">
+
+<h2>Anti Spoof AI</h2>
+
+<p>
+
+Detects cloned, recorded and synthetic voices instantly.
+
+</p>
+
+</div>
+
+<div class="feature">
+
+<h2>Quantum Encryption</h2>
+
+<p>
+
+Protects authentication data using next-generation encryption.
+
+</p>
+
+</div>
+
+</section>
+
+<!-- JavaScript -->
+
+<script src="script.js"></script>
+
+<section class="status-section">
+
+<div class="status-card">
+
+<h3>
+
+Microphone Status
+
+</h3>
+
+<p id="micStatus">
+
+Waiting...
+
+</p>
+
+</div>
+
+<div class="status-card">
+
+<h3>
+
+Browser Permission
+
+</h3>
+
+<p id="permission">
+
+Unknown
+
+</p>
+
+</div>
+
+<div class="status-card">
+
+<h3>
+
+Voice Match
+
+</h3>
+
+<h2 id="match">
+
+0%
+
+</h2>
+
+</div>
+
+<div class="status-card">
+
+<h3>
+
+AI Confidence
+
+</h3>
+
+<div class="meter">
+
+<div id="confidenceBar">
+
+</div>
+
+</div>
+
+<span id="confidenceText">
+
+0%
+
+</span>
+
+</div>
+
+</section>
+
+<section class="wave-section">
+
+<h2>
+
+Voice Activity
+
+</h2>
+
+<div class="wave">
+
+<div></div>
+
+<div></div>
+
+<div></div>
+
+<div></div>
+
+<div></div>
+
+<div></div>
+
+<div></div>
+
+<div></div>
+
+<div></div>
+
+<div></div>
+
+</div>
+
+</section>
+
+<footer>
+  <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet"
+          href="enroll.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+</head>
+
+<body>
+
+<!-- ================================= -->
+<!-- Enrollment Banner -->
+<!-- ================================= -->
+
+<section class="banner">
+
+    <div class="banner-text">
+
+        <h1>Create Your AI Voice Identity</h1>
+
+        <p>
+
+            Record multiple voice samples to generate
+            a secure AI Voiceprint for authentication.
+
+        </p>
+
+        <button id="startEnrollment">
+
+            Start Enrollment
+
+        </button>
+
+    </div>
+
+</section>
+
+<!-- ================================= -->
+<!-- Progress -->
+<!-- ================================= -->
+
+<section class="progress-section">
+
+    <h2>Enrollment Progress</h2>
+
+    <div class="progress-bar">
+
+        <div id="progressFill"></div>
+
+    </div>
+
+    <p id="progressText">
+
+        0% Completed
+
+    </p>
+
+</section>
+
+<!-- ================================= -->
+<!-- Voice Sample Counter -->
+<!-- ================================= -->
+
+<section class="sample-grid">
+
+    <div class="card">
+
+        <h3>Voice Samples</h3>
+
+        <h1 id="sampleCount">
+
+            0 / 5
+
+        </h1>
+
+    </div>
+
+    <div class="card">
+
+        <h3>Microphone Calibration</h3>
+
+        <p id="micCalibration">
+
+            Waiting...
+
+        </p>
+
+    </div>
+
+    <div class="card">
+
+        <h3>Noise Quality</h3>
+
+        <p id="noiseLevel">
+
+            Not Measured
+
+        </p>
+
+    </div>
+
+</section>
+
+<!-- ================================= -->
+<!-- AI Analysis -->
+<!-- ================================= -->
+
+<section class="analysis">
+
+    <div class="analysis-card">
+
+        <h3>Emotion Detection</h3>
+
+        <h2 id="emotion">
+
+            Unknown
+
+        </h2>
+
+    </div>
+
+    <div class="analysis-card">
+
+        <h3>Voice Health</h3>
+
+        <h2 id="health">
+
+            Pending
+
+        </h2>
+
+    </div>
+
+    <div class="analysis-card">
+
+        <h3>Speech Speed</h3>
+
+        <h2 id="speed">
+
+            0 WPM
+
+        </h2>
+
+    </div>
+
+</section>
+
+<!-- ================================= -->
+<!-- Voiceprint -->
+<!-- ================================= -->
+
+<section class="voiceprint">
+
+    <h2>
+
+        AI Voiceprint Generator
+
+    </h2>
+
+    <div class="voice-grid">
+
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+
+    </div>
+
+    <button id="saveVoice">
+
+        Save AI Voiceprint
+
+    </button>
+
+</section>
+
+<script src="enroll.js"></script>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>AI Voice Lock Dashboard</title>
+
+<link rel="stylesheet"
+href="dashboard.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+rel="stylesheet">
+
+</head>
+
+<body>
+
+<!-- ========================= -->
+<!-- Dashboard Hero -->
+<!-- ========================= -->
+
+<section class="dashboard-header">
+
+<h1>
+
+Security Analytics Center
+
+</h1>
+
+<p>
+
+Monitor authentication history, device trust,
+system health and AI-powered security insights.
+
+</p>
+
+</section>
+
+<!-- ========================= -->
+<!-- Summary Cards -->
+<!-- ========================= -->
+
+<section class="summary-grid">
+
+<div class="summary-card">
+
+<h3>
+
+Overall Security Score
+
+</h3>
+
+<h1 id="securityScore">
+
+98%
+
+</h1>
+
+</div>
+
+<div class="summary-card">
+
+<h3>
+
+AI Risk Score
+
+</h3>
+
+<h1 id="riskScore">
+
+Low
+
+</h1>
+
+</div>
+
+<div class="summary-card">
+
+<h3>
+
+Trusted Device
+
+</h3>
+
+<h2 id="deviceStatus">
+
+Verified
+
+</h2>
+
+</div>
+
+<div class="summary-card">
+
+<h3>
+
+System Health
+
+</h3>
+
+<h2 id="systemHealth">
+
+Excellent
+
+</h2>
+
+</div>
+
+</section>
+
+<!-- ========================= -->
+<!-- Device Information -->
+<!-- ========================= -->
+
+<section class="device-panel">
+
+<h2>
+
+Current Device
+
+</h2>
+
+<div class="device-grid">
+
+<div class="device-box">
+
+<h4>Browser</h4>
+
+<p id="browserName">
+
+Loading...
+
+</p>
+
+</div>
+
+<div class="device-box">
+
+<h4>Operating System</h4>
+
+<p id="operatingSystem">
+
+Loading...
+
+</p>
+
+</div>
+
+<div class="device-box">
+
+<h4>Platform</h4>
+
+<p id="platformName">
+
+Loading...
+
+</p>
+
+</div>
+
+<div class="device-box">
+
+<h4>Language</h4>
+
+<p id="language">
+
+Loading...
+
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ========================= -->
+<!-- Authentication Statistics -->
+<!-- ========================= -->
+
+<section class="stats">
+
+<h2>
+
+Authentication Statistics
+
+</h2>
+
+<div class="stats-grid">
+
+<div class="stat-card">
+
+<h3>
+
+Successful Logins
+
+</h3>
+
+<h1 id="successLogin">
+
+152
+
+</h1>
+
+</div>
+
+<div class="stat-card">
+
+<h3>
+
+Failed Attempts
+
+</h3>
+
+<h1 id="failedLogin">
+
+03
+
+</h1>
+
+</div>
+
+<div class="stat-card">
+
+<h3>
+
+Trusted Devices
+
+</h3>
+
+<h1>
+
+04
+
+</h1>
+
+</div>
+
+<div class="stat-card">
+
+<h3>
+
+Security Alerts
+
+</h3>
+
+<h1>
+
+01
+
+</h1>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ========================= -->
+<!-- Activity Timeline -->
+<!-- ========================= -->
+
+<section class="timeline">
+
+<h2>
+
+Recent Activity
+
+</h2>
+
+<div class="timeline-box">
+
+<div class="event">
+
+<span class="dot"></span>
+
+<p>
+
+Voice authentication completed successfully.
+
+</p>
+
+</div>
+
+<div class="event">
+
+<span class="dot"></span>
+
+<p>
+
+New voice profile enrolled.
+
+</p>
+
+</div>
+
+<div class="event">
+
+<span class="dot"></span>
+
+<p>
+
+Trusted device verified.
+
+</p>
+
+</div>
+
+<div class="event">
+
+<span class="dot"></span>
+
+<p>
+
+Security scan completed.
+
+</p>
+
+</div>
+
+</div>
+
+</section>
+<script src="dashboard.js"></script>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>AI Voice Lock Security Center</title>
+
+<link rel="stylesheet"
+href="security.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+rel="stylesheet">
+
+</head>
+
+<body>
+<!-- ========================= -->
+<!-- Security Banner -->
+<!-- ========================= -->
+
+<!-- ================= SECURITY HERO ================= -->
+
+<section class="security-hero">
+
+    <h1>AI Security Operations Center</h1>
+
+    <p>
+        Monitor advanced security events, encryption status,
+        voice tampering attempts and AI-powered cyber defense.
+    </p>
+
+</section>
+
+<!-- ================= SECURITY STATUS ================= -->
+
+<section class="security-grid">
+
+    <div class="security-card">
+
+        <h3>Threat Level</h3>
+
+        <h2 id="threatLevel">LOW</h2>
+
+    </div>
+
+    <div class="security-card">
+
+        <h3>Firewall Status</h3>
+
+        <h2 id="firewallStatus">Active</h2>
+
+    </div>
+
+    <div class="security-card">
+
+        <h3>Encryption</h3>
+
+        <h2 id="encryptionStatus">AES-256 Enabled</h2>
+
+    </div>
+
+    <div class="security-card">
+
+        <h3>Voice Tamper</h3>
+
+        <h2 id="tamperStatus">Not Detected</h2>
+
+    </div>
+
+</section>
+
+<!-- ================= AI DETECTION ================= -->
+
+<section class="ai-section">
+
+    <h2>AI Detection Modules</h2>
+
+    <div class="detection-grid">
+
+        <div class="detect-card">
+
+            <h3>Deepfake Detection</h3>
+
+            <p id="deepfake">Scanning...</p>
+
+        </div>
+
+        <div class="detect-card">
+
+            <h3>Replay Attack</h3>
+
+            <p id="replay">Monitoring...</p>
+
+        </div>
+
+        <div class="detect-card">
+
+            <h3>Intrusion Detection</h3>
+
+            <p id="intrusion">Secure</p>
+
+        </div>
+
+        <div class="detect-card">
+
+            <h3>Threat Intelligence</h3>
+
+            <p id="intel">Collecting Data</p>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ================= EVENTS ================= -->
+
+<!-- ========================= -->
+<!-- Security Events -->
+<!-- ========================= -->
+
+<section class="events">
+
+<h2>
+
+Live Security Events
+
+</h2>
+
+<div class="event-box">
+
+<div class="event">
+
+<span class="status safe"></span>
+
+<p>
+
+Firewall inspection completed successfully.
+
+</p>
+
+</div>
+
+<div class="event">
+
+<span class="status safe"></span>
+
+<p>
+
+Encryption key verified.
+
+</p>
+
+</div>
+
+<div class="event">
+
+<span class="status warning"></span>
+
+<p>
+
+Voice integrity monitoring active.
+
+</p>
+
+</div>
+
+<div class="event">
+
+<span class="status safe"></span>
+
+<p>
+
+No malicious activity detected.
+
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ========================= -->
+<!-- Compliance -->
+<!-- ========================= -->
+
+<section class="compliance">
+
+<h2>
+
+Security Compliance Dashboard
+
+</h2>
+
+<table>
+
+<tr>
+
+<th>Compliance Standard</th>
+
+<th>Status</th>
+
+</tr>
+
+<tr>
+
+<td>ISO/IEC 27001</td>
+
+<td>Compliant</td>
+
+</tr>
+
+<tr>
+
+<td>OWASP Top 10</td>
+
+<td>Compliant</td>
+
+</tr>
+
+<tr>
+
+<td>NIST Cybersecurity Framework</td>
+
+<td>Compliant</td>
+
+</tr>
+
+<tr>
+
+<td>Data Encryption Policy</td>
+
+<td>Enabled</td>
+
+</tr>
+
+</table>
+
+</section>
+
+<footer>
+
+<p>
+
+© 2026 AI Voice Lock Security Operations Center
+
+</p>
+
+</footer>
+
+<script src="security.js"></script>
+</footer>
+
+<script src="script.js"></script>
+
+</body>
+
 </html>
