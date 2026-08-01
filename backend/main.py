@@ -6,8 +6,16 @@ import json
 from register import register_user
 from ai.authenticate import authenticate
 
+from config.database import users_collection
+from routes.user import router as user_router
 
-app = FastAPI()
+
+app = FastAPI(
+    title="AI Voice Lock Backend"
+)
+
+# Register all user-related APIs
+app.include_router(user_router)
 
 
 # ---------------- Home API ----------------
@@ -77,6 +85,7 @@ def get_dashboard():
         )
 
 
+
 # ---------------- Voice History API ----------------
 @app.get("/voice/history")
 def get_voice_history():
@@ -86,7 +95,6 @@ def get_voice_history():
             "history",
             "verification_history.json"
         )
-
 
         if not os.path.exists(history_file):
             return []
@@ -116,7 +124,6 @@ def get_user_history(username: str):
             "history",
             "verification_history.json"
         )
-
 
         if not os.path.exists(history_file):
             return []
@@ -173,41 +180,6 @@ async def register(
         )
 
 
-    # 10 MB file size limit
-    MAX_FILE_SIZE = 10 * 1024 * 1024
-
-
-    audio.file.seek(0, 2)
-    file_size = audio.file.tell()
-    audio.file.seek(0)
-
-
-    if file_size > MAX_FILE_SIZE:
-        raise HTTPException(
-            status_code=400,
-            detail="Audio file size should be less than 10MB"
-        )
-
-
-    allowed_extensions = [
-        ".wav",
-        ".mp3",
-        ".mpeg"
-    ]
-
-
-    extension = os.path.splitext(
-        audio.filename
-    )[1].lower()
-
-
-    if extension not in allowed_extensions:
-        raise HTTPException(
-            status_code=400,
-            detail="Only WAV, MP3 and MPEG files are allowed."
-        )
-
-
     os.makedirs(
         "temp",
         exist_ok=True
@@ -233,6 +205,7 @@ async def register(
         [audio_path]
     )
 
+
     if os.path.exists(audio_path):
         os.remove(audio_path)
 
@@ -252,40 +225,6 @@ async def verify(
         raise HTTPException(
             status_code=400,
             detail="No audio file uploaded"
-        )
-
-
-    MAX_FILE_SIZE = 10 * 1024 * 1024
-
-
-    audio.file.seek(0, 2)
-    file_size = audio.file.tell()
-    audio.file.seek(0)
-
-
-    if file_size > MAX_FILE_SIZE:
-        raise HTTPException(
-            status_code=400,
-            detail="Audio file size should be less than 10MB"
-        )
-
-
-    allowed_extensions = [
-        ".wav",
-        ".mp3",
-        ".mpeg"
-    ]
-
-
-    extension = os.path.splitext(
-        audio.filename
-    )[1].lower()
-
-
-    if extension not in allowed_extensions:
-        raise HTTPException(
-            status_code=400,
-            detail="Only WAV, MP3 and MPEG files are allowed."
         )
 
 
@@ -311,8 +250,27 @@ async def verify(
     result = authenticate(
         audio_path
     )
+
+
     if os.path.exists(audio_path):
         os.remove(audio_path)
 
 
     return result
+
+
+
+# ---------------- Database Test API ----------------
+@app.get("/test-db")
+def test_database():
+
+    users_collection.insert_one(
+        {
+            "name": "Test User",
+            "email": "test@gmail.com"
+        }
+    )
+
+    return {
+        "message": "Database connected"
+    }
