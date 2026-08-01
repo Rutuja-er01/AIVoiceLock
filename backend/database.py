@@ -1,26 +1,19 @@
-import json
-import os
-
-
-DB_FILE = "users/users.json"
-
+from config.database import users_collection
 
 def save_user(username, passphrase):
-
-    users = load_users()
-
-    users[username] = {
-        "passphrase": passphrase
-    }
-
-    with open(DB_FILE, "w") as file:
-        json.dump(users, file, indent=4)
-
+    users_collection.insert_one(
+        {
+            "username": username,
+            "passphrase": passphrase
+        }
+    )
 
 def load_users():
+    users = {}
 
-    if not os.path.exists(DB_FILE):
-        return {}
+    for user in users_collection.find():
+        users[user["username"]] = {
+            "passphrase": user["passphrase"]
+        }
 
-    with open(DB_FILE, "r") as file:
-        return json.load(file)
+    return users

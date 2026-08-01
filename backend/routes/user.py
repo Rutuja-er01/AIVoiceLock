@@ -1,11 +1,10 @@
 from fastapi import APIRouter
-from models.user_model import User,LoginUser
+from models.user_model import User, LoginUser
 from config.database import users_collection
 
 router = APIRouter()
 
-
-@router.post("/register")
+@router.post("/user/register")
 def register_user(user: User):
 
     user_data = user.model_dump()
@@ -15,6 +14,8 @@ def register_user(user: User):
     return {
         "message": "User registered successfully"
     }
+
+
 @router.post("/login")
 def login_user(user: LoginUser):
 
