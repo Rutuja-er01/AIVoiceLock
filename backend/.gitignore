@@ -1,5 +1,36 @@
+<<<<<<< HEAD
 venv/
 __pycache__/
 *.pyc
 uploads/
 .env
+=======
+# Virtual environments
+venv/
+venv312/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Environment variables
+.env
+
+# Temporary files
+temp/
+
+# Audio datasets and uploads
+dataset/
+uploads/
+
+# Logs/history
+history/
+
+# Trained models
+*.pkl
+!ai/speaker_model.pkl
+
+# Test files
+test.wav
+test_register.py
+>>>>>>> origin/voice-ai

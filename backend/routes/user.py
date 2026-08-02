@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from models.user_model import User, LoginUser,UpdateUser,ChangePassword
+from models.user_model import User, LoginUser, UpdateUser, ChangePassword
 from config.database import users_collection
 from utils.jwt import create_access_token, verify_access_token
 from utils.hash import hash_password, verify_password
@@ -10,7 +10,7 @@ router = APIRouter()
 security = HTTPBearer()
 
 
-@router.post("/register")
+@router.post("/user/register")
 def register_user(user: User):
 
     user_data = user.model_dump()
@@ -69,6 +69,7 @@ def login_user(user: LoginUser):
         "token_type": "bearer"
     }
 
+
 @router.get("/profile")
 def get_profile(
     credentials: HTTPAuthorizationCredentials = Depends(security)
@@ -101,6 +102,8 @@ def get_profile(
         "message": "Profile fetched successfully",
         "user": user
     }
+
+
 @router.put("/update-profile")
 def update_profile(
     user: UpdateUser,
@@ -129,6 +132,8 @@ def update_profile(
     return {
         "message": "Profile updated successfully"
     }
+
+
 @router.put("/change-password")
 def change_password(
     password_data: ChangePassword,
