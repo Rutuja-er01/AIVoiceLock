@@ -23,4 +23,4 @@ def verify_phrase(audio_file, expected_phrase):
 
     print("Similarity:", similarity)
 
-    return similarity >= 0.70
+    return similarity >= 0.60

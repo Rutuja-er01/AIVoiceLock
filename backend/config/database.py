@@ -12,3 +12,4 @@ database = client["VoiceLockDB"]
 
 users_collection = database["users"]
 voice_collection = database["voice_samples"]
+history_collection = database["verification_history"]
