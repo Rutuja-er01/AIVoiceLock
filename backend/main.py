@@ -7,7 +7,11 @@ from routes import voice
 from register import register_user
 from ai.authenticate import authenticate
 
-from config.database import users_collection
+from config.database import (
+    users_collection,
+    voice_collection,
+    history_collection
+)
 from routes.user import router as user_router
 
 app = FastAPI(
@@ -35,40 +39,28 @@ def home():
 @app.get("/dashboard")
 def get_dashboard():
     try:
-        users_file = os.path.join("users", "users.json")
+        # Total registered users
+        total_users = users_collection.count_documents({})
 
-        if os.path.exists(users_file):
-            with open(users_file, "r") as f:
-                users = json.load(f)
-        else:
-            users = {}
+        # Total uploaded voice samples
+        total_voice_samples = voice_collection.count_documents({})
 
-        history_file = os.path.join(
-            "history",
-            "verification_history.json"
+        # Total verifications
+        total_verifications = history_collection.count_documents({})
+
+        # Successful verifications
+        successful_verifications = history_collection.count_documents(
+            {"status": "Access Granted"}
         )
 
-        if os.path.exists(history_file):
-            with open(history_file, "r") as f:
-                history = json.load(f)
-        else:
-            history = []
-
-        total_verifications = len(history)
-
-        successful_verifications = sum(
-            1 for item in history
-            if item["status"] == "Access Granted"
-        )
-
-        failed_verifications = (
-            total_verifications -
-            successful_verifications
+        # Failed verifications
+        failed_verifications = history_collection.count_documents(
+            {"status": "Access Denied"}
         )
 
         return {
-            "total_users": len(users),
-            "registered_users": list(users.keys()),
+            "total_users": total_users,
+            "total_voice_samples": total_voice_samples,
             "total_verifications": total_verifications,
             "successful_verifications": successful_verifications,
             "failed_verifications": failed_verifications,
@@ -81,21 +73,13 @@ def get_dashboard():
             detail=str(e)
         )
 
-
 # ---------------- Voice History API ----------------
 @app.get("/voice/history")
 def get_voice_history():
     try:
-        history_file = os.path.join(
-            "history",
-            "verification_history.json"
+        history = list(
+            history_collection.find({}, {"_id": 0})
         )
-
-        if not os.path.exists(history_file):
-            return []
-
-        with open(history_file, "r") as f:
-            history = json.load(f)
 
         return history
 
@@ -105,26 +89,16 @@ def get_voice_history():
             detail=str(e)
         )
 
-
 # ---------------- User History API ----------------
 @app.get("/voice/history/{username}")
 def get_user_history(username: str):
     try:
-        history_file = os.path.join(
-            "history",
-            "verification_history.json"
+        user_history = list(
+            history_collection.find(
+                {"speaker": username},
+                {"_id": 0}
+            )
         )
-
-        if not os.path.exists(history_file):
-            return []
-
-        with open(history_file, "r") as f:
-            history = json.load(f)
-
-        user_history = [
-            item for item in history
-            if item["speaker"].lower() == username.lower()
-        ]
 
         return user_history
 
@@ -133,7 +107,6 @@ def get_user_history(username: str):
             status_code=500,
             detail=str(e)
         )
-
 
 # ---------------- Register API ----------------
 @app.post("/register")
