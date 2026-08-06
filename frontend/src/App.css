@@ -123,7 +123,9 @@ nav a:hover{
 
     color:#00e5ff;
 }
-
+.logo{
+    width: 200px;
+}
 /*==========================
 HERO
 ==========================*/
@@ -481,6 +483,60 @@ LOCK
     bottom:18px;
 
     font-size:28px;
+}
+.ai-mic-container{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    margin-top:35px;
+    left: 900px;
+}
+
+.mic-btn{
+    width:90px;
+    height:90px;
+    border:none;
+    border-radius:50%;
+    cursor:pointer;
+    background:linear-gradient(135deg,#00F5FF,#00A8FF);
+    color:white;
+    font-size:34px;
+    box-shadow:
+    0 0 20px rgba(0,255,255,.6),
+    0 0 45px rgba(0,255,255,.4);
+    transition:.3s;
+}
+
+.mic-btn:hover{
+    transform:scale(1.08);
+}
+
+.mic-btn.listening{
+    animation:pulse 1.2s infinite;
+}
+
+@keyframes pulse{
+
+0%{
+box-shadow:0 0 0 0 rgba(0,255,255,.7);
+}
+
+70%{
+box-shadow:0 0 0 25px rgba(0,255,255,0);
+}
+
+100%{
+box-shadow:0 0 0 0 rgba(0,255,255,0);
+}
+
+}
+
+#micStatus{
+margin-top:12px;
+font-size:18px;
+font-weight:600;
+color:#6fffd9;
+letter-spacing:1px;
 }
 
 /*====================================

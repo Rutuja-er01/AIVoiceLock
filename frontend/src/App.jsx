@@ -350,7 +350,63 @@ links.forEach(link=>{
     });
 
 });
+const micBtn = document.getElementById("micBtn");
+const micStatus = document.getElementById("micStatus");
 
+const SpeechRecognition =
+window.SpeechRecognition ||
+window.webkitSpeechRecognition;
+
+if(SpeechRecognition){
+
+const recognition = new SpeechRecognition();
+
+recognition.continuous=false;
+recognition.lang="en-US";
+recognition.interimResults=false;
+
+micBtn.onclick=()=>{
+
+recognition.start();
+
+};
+
+recognition.onstart=()=>{
+
+micBtn.classList.add("listening");
+micStatus.innerHTML="🎤 Listening...";
+
+};
+
+recognition.onend=()=>{
+
+micBtn.classList.remove("listening");
+micStatus.innerHTML="Tap to Speak";
+
+};
+
+recognition.onresult=(event)=>{
+
+const text=event.results[0][0].transcript;
+
+micStatus.innerHTML="✅ "+text;
+
+console.log(text);
+
+};
+
+recognition.onerror=()=>{
+
+micBtn.classList.remove("listening");
+micStatus.innerHTML="❌ Voice Not Detected";
+
+};
+
+}else{
+
+micStatus.innerHTML="Speech Recognition Not Supported";
+
+}
 // =======================================
 // Check Browser Microphone Permission
 // =======================================
