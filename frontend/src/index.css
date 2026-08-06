@@ -1,0 +1,95 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  background: linear-gradient(135deg, #020617, #0f172a);
+  color: white;
+  min-height: 100vh;
+}
+
+/* Navbar */
+
+nav {
+  display: flex;
+  justify-content: center;
+  gap: 35px;
+  padding: 20px;
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(10px);
+}
+
+nav a {
+  color: #38bdf8;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+nav a:hover {
+  color: white;
+}
+
+
+/* Home */
+
+.home-container {
+  text-align: center;
+  padding: 100px 20px;
+}
+
+.home-container h1 {
+  font-size: 55px;
+  margin-bottom: 20px;
+}
+
+.home-container p {
+  font-size: 22px;
+  color: #cbd5e1;
+}
+
+.home-container h3 {
+  margin-top: 30px;
+  color: #38bdf8;
+}
+
+
+/* Common Pages */
+
+.page-container {
+  width: 60%;
+  margin: 80px auto;
+  background: rgba(255,255,255,0.08);
+  padding: 40px;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 0 30px rgba(56,189,248,0.2);
+}
+
+
+input {
+  width: 80%;
+  padding: 12px;
+  margin: 10px;
+  border-radius: 10px;
+  border: none;
+}
+
+
+button {
+  background: #38bdf8;
+  color: black;
+  padding: 12px 30px;
+  border-radius: 25px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+
+button:hover {
+  background: white;
+}

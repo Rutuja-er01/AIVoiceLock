@@ -1,0 +1,180 @@
+.home{
+    font-family: "Poppins", sans-serif;
+    background:#0F172A;
+    color:#FFFFFF;
+}
+
+/* HERO */
+
+.hero{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    min-height:90vh;
+    padding:60px 8%;
+    gap:80px;
+}
+
+.hero-text{
+    flex:1;
+}
+
+.hero-text h1{
+    font-size:58px;
+    color:#FFFFFF;
+    line-height:1.2;
+    margin-bottom:20px;
+}
+
+.hero-text h2{
+    color:#3B82F6;
+    font-size:28px;
+    margin-bottom:20px;
+}
+
+.hero-text p{
+    font-size:20px;
+    color:#CBD5E1;
+    line-height:1.8;
+    margin-bottom:35px;
+}
+
+/* Buttons */
+
+.buttons{
+    display:flex;
+    gap:25px;
+    margin-top:20px;
+}
+
+.buttons button{
+    padding:15px 35px;
+    border:none;
+    border-radius:12px;
+    cursor:pointer;
+    font-size:18px;
+    font-weight:600;
+    transition:0.3s;
+}
+
+.buttons button:first-child{
+    background:#2563EB;
+    color:white;
+}
+
+.buttons button:first-child:hover{
+    background:#1D4ED8;
+    transform:translateY(-3px);
+}
+
+.secondary{
+    background:#1E293B !important;
+    color:white;
+    border:1px solid #3B82F6;
+}
+
+.secondary:hover{
+    background:#334155 !important;
+    transform:translateY(-3px);
+}
+
+/* Hero Image */
+
+.hero-image{
+    flex:1;
+    display:flex;
+    justify-content:center;
+}
+
+.hero-image img{
+    width:420px;
+    max-width:100%;
+}
+
+/* FEATURES */
+
+.features{
+    padding:80px 8%;
+    text-align:center;
+}
+
+.features h1{
+    font-size:42px;
+    color:#FFFFFF;
+    margin-bottom:50px;
+}
+
+.cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:30px;
+}
+
+.card{
+    background:#1E293B;
+    border-radius:20px;
+    padding:30px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.35);
+    transition:.3s;
+}
+
+.card:hover{
+    transform:translateY(-8px);
+    border:1px solid #2563EB;
+}
+
+.card h2{
+    color:#60A5FA;
+    margin-bottom:15px;
+}
+
+.card p{
+    color:#CBD5E1;
+    line-height:1.6;
+}
+
+/* HOW IT WORKS */
+
+.working{
+    padding:80px 8%;
+    text-align:center;
+}
+
+.working h1{
+    font-size:42px;
+    color:#FFFFFF;
+    margin-bottom:40px;
+}
+
+.working p{
+    font-size:22px;
+    margin:12px 0;
+    color:#CBD5E1;
+}
+
+/* Responsive */
+
+@media(max-width:900px){
+
+.hero{
+    flex-direction:column;
+    text-align:center;
+}
+
+.hero-text{
+    width:100%;
+}
+
+.buttons{
+    justify-content:center;
+}
+
+.hero-text h1{
+    font-size:42px;
+}
+
+.hero-image img{
+    width:320px;
+}
+
+}

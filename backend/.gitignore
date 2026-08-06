@@ -1,10 +1,3 @@
-<<<<<<< HEAD
-venv/
-__pycache__/
-*.pyc
-uploads/
-.env
-=======
 # Virtual environments
 venv/
 venv312/
@@ -33,4 +26,6 @@ history/
 # Test files
 test.wav
 test_register.py
->>>>>>> origin/voice-ai
+
+# Windows files
+desktop.ini
