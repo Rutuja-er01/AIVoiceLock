@@ -1,7 +1,9 @@
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+
 import shutil
 import os
+from routes import voice_auth
 import json
 
 from routes import voice
@@ -31,10 +33,17 @@ app.add_middleware(
 
 # Register all user-related APIs
 app.include_router(user_router)
+
 app.include_router(
     voice.router,
     prefix="/voice",
     tags=["Voice"]
+)
+
+app.include_router(
+    voice_auth.router,
+    prefix="/voice",
+    tags=["Voice Authentication"]
 )
 
 
