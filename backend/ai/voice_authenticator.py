@@ -1,48 +1,67 @@
-import os
-import joblib
+import numpy as np
 
 from ai.speech_to_text import speech_to_text
 from ai.mfcc_extractor import extract_mfcc
 
 
-# -----------------------------
-# Load Trained Speaker Model
-# -----------------------------
+def authenticate(
+    audio_path,
+    registered_embedding,
+    expected_phrase=None
+):
 
-current_dir = os.path.dirname(os.path.abspath(__file__))
-
-model_path = os.path.join(
-    current_dir,
-    "speaker_model.pkl"
-)
-
-model = joblib.load(model_path)
-
-print("Speaker model loaded successfully!")
-
-
-
-# -----------------------------
-# Authentication Function
-# -----------------------------
-
-def authenticate(audio_path):
-
+    # -----------------------------
     # Speech Recognition
-    phrase_ok, detected_text = speech_to_text(audio_path)
+    # -----------------------------
 
+    phrase_ok = True
+    detected_text = ""
 
+    if expected_phrase:
+        phrase_ok, detected_text = speech_to_text(audio_path)
+
+    # -----------------------------
     # Speaker Recognition
-    feature = extract_mfcc(audio_path).reshape(1, -1)
+    # -----------------------------
 
-    speaker = model.predict(feature)[0]
+    current_embedding = extract_mfcc(audio_path)
 
+    registered_embedding = np.array(
+        registered_embedding,
+        dtype=float
+    )
 
-    access = phrase_ok and speaker == "vaishnavi"
+    # -----------------------------
+    # Cosine Similarity
+    # -----------------------------
 
+    numerator = np.dot(
+        current_embedding,
+        registered_embedding
+    )
+
+    denominator = (
+        np.linalg.norm(current_embedding)
+        *
+        np.linalg.norm(registered_embedding)
+    )
+
+    if denominator == 0:
+        similarity = 0
+    else:
+        similarity = numerator / denominator
+
+    # -----------------------------
+    # Speaker Verification
+    # -----------------------------
+
+    speaker_match = similarity >= 0.75
+
+    access = phrase_ok and speaker_match
 
     return {
         "phrase": detected_text,
-        "speaker": speaker,
+        "similarity": round(float(similarity), 4),
+        "speaker_match": speaker_match,
         "access": access
     }
