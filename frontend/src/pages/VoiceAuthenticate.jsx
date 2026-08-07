@@ -1,10 +1,14 @@
 import { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import API from "../api/axios";
 import RecordRTC from "recordrtc";
-import "./VoiceRegister.css";
+import "./VoiceAuthenticate.css";
 
 
-function VoiceRegister() {
+function VoiceAuthenticate() {
+
+
+const navigate = useNavigate();
 
 
 const recorderRef = useRef(null);
@@ -15,24 +19,18 @@ const timerRef = useRef(null);
 const [recording, setRecording] = useState(false);
 const [seconds, setSeconds] = useState(0);
 const [processing, setProcessing] = useState(false);
-const [message, setMessage] = useState("");
+const [result, setResult] = useState("");
 
 
 
 const startRecording = async () => {
 
-
 try {
 
-
-setMessage("");
-
-
+setResult("");
 
 const stream = await navigator.mediaDevices.getUserMedia({
-
 audio:true,
-
 });
 
 
@@ -41,7 +39,6 @@ streamRef.current = stream;
 
 
 const recorder = new RecordRTC(stream, {
-
 
 type:"audio",
 
@@ -53,7 +50,6 @@ numberOfAudioChannels:1,
 
 desiredSampRate:16000,
 
-
 });
 
 
@@ -64,7 +60,6 @@ recorderRef.current = recorder;
 recorder.startRecording();
 
 
-
 setRecording(true);
 
 setSeconds(0);
@@ -73,9 +68,7 @@ setSeconds(0);
 
 timerRef.current = setInterval(()=>{
 
-
-setSeconds(previous => previous + 1);
-
+setSeconds(previous=>previous+1);
 
 },1000);
 
@@ -85,17 +78,13 @@ setSeconds(previous => previous + 1);
 
 catch(error){
 
+console.error("Microphone error:",error);
 
-console.log(error);
-
-
-setMessage(
+setResult(
 "Microphone permission denied."
 );
 
-
 }
-
 
 };
 
@@ -106,12 +95,8 @@ setMessage(
 const stopRecording = () => {
 
 
-
-if(!recorderRef.current){
-
+if(!recorderRef.current)
 return;
-
-}
 
 
 
@@ -121,9 +106,7 @@ recorderRef.current.stopRecording(async()=>{
 const audioBlob = recorderRef.current.getBlob();
 
 
-
 setRecording(false);
-
 
 
 clearInterval(timerRef.current);
@@ -132,22 +115,19 @@ clearInterval(timerRef.current);
 
 if(streamRef.current){
 
-
 streamRef.current
 .getTracks()
 .forEach(track=>track.stop());
-
 
 }
 
 
 
-await registerVoice(audioBlob);
+await authenticateVoice(audioBlob);
 
 
 
 });
-
 
 
 };
@@ -156,8 +136,7 @@ await registerVoice(audioBlob);
 
 
 
-
-const registerVoice = async(audioBlob)=>{
+const authenticateVoice = async(audioBlob)=>{
 
 
 try{
@@ -165,11 +144,9 @@ try{
 
 setProcessing(true);
 
-
-setMessage(
-"🤖 Processing your voice..."
+setResult(
+"🤖 Verifying your voice..."
 );
-
 
 
 
@@ -183,16 +160,15 @@ formData.append(
 
 audioBlob,
 
-"voice-profile.wav"
+"voice-authentication.wav"
 
 );
 
 
 
-
 const response = await API.post(
 
-"/voice/upload",
+"/voice/verify",
 
 formData,
 
@@ -200,9 +176,9 @@ formData,
 
 headers:{
 
-"Content-Type":"multipart/form-data",
+"Content-Type":"multipart/form-data"
 
-},
+}
 
 }
 
@@ -210,66 +186,53 @@ headers:{
 
 
 
+console.log(response.data);
 
-setMessage(
 
-response.data.message ||
 
-"Voice profile created successfully."
-
+setResult(
+JSON.stringify(response.data)
 );
 
 
 
 }
-
-
 
 catch(error){
 
 
-
-console.log(error);
+console.error("Authentication error:",error);
 
 
 
 if(error.response){
 
-
-setMessage(
+setResult(
 
 error.response.data?.detail ||
 
-"Voice profile creation failed."
+"Voice authentication failed."
 
 );
-
 
 }
 
 else{
 
-
-setMessage(
-"Backend not connected."
+setResult(
+"Unable to connect to backend."
 );
 
-
 }
 
 
-
 }
-
 
 finally{
 
-
 setProcessing(false);
 
-
 }
-
 
 
 };
@@ -281,36 +244,66 @@ setProcessing(false);
 return(
 
 
-<div className="voice-register-page">
+<div className="voice-profile-page">
 
 
 
-<div className="voice-register-card">
+<button
 
+className="back-btn"
 
+onClick={()=>navigate("/dashboard")}
 
-<div className="voice-logo">
+>
 
-🎙️
+← Dashboard
 
-</div>
+</button>
+
 
 
 
 
 <h1>
-
-Create Voice Identity
-
+🔐 Voice Authentication
 </h1>
 
 
 
 <p>
-
-Create your secure biometric voice profile for VoiceLock AI.
-
+Verify your identity using your registered voice.
 </p>
+
+
+
+
+
+<div className="info-card">
+
+
+<h2>
+How Authentication Works
+</h2>
+
+
+<p>
+🎙 Record your voice sample
+</p>
+
+
+<p>
+🤖 AI compares your voice pattern
+</p>
+
+
+<p>
+✅ Access is granted after verification
+</p>
+
+
+</div>
+
+
 
 
 
@@ -320,14 +313,13 @@ Create your secure biometric voice profile for VoiceLock AI.
 
 <button
 
-className="record-btn"
-
 onClick={startRecording}
+
+className="record-btn"
 
 >
 
-
-🎙 Start Recording
+🎙 Start Authentication
 
 
 </button>
@@ -343,28 +335,20 @@ onClick={startRecording}
 {recording && (
 
 
-<div className="recording-area">
-
-
-
-<div className="pulse">
-
-🔴
-
-</div>
-
+<div className="recording-box">
 
 
 <h2>
-
-Recording Voice...
-
+🔴 Recording...
 </h2>
 
 
 
-<div className="timer">
+<p>
 
+Recording Time:
+
+{" "}
 
 {Math.floor(seconds/60)
 .toString()
@@ -377,20 +361,17 @@ Recording Voice...
 .padStart(2,"0")}
 
 
-
-</div>
-
+</p>
 
 
 
 <button
 
-className="stop-btn"
-
 onClick={stopRecording}
 
->
+className="stop-btn"
 
+>
 
 ⏹ Stop Recording
 
@@ -409,23 +390,33 @@ onClick={stopRecording}
 
 
 
+
 {processing && (
 
-
-<div className="processing">
-
-
 <h2>
-
-🤖 Creating Voice Profile
-
+🤖 Processing Voice...
 </h2>
+
+)}
+
+
+
+
+
+
+{result && !processing && (
+
+
+<div className="result-box">
+
+
+<h3>
+Authentication Result
+</h3>
 
 
 <p>
-
-AI is generating your voice fingerprint...
-
+{result}
 </p>
 
 
@@ -436,43 +427,13 @@ AI is generating your voice fingerprint...
 
 
 
-
-
-
-{message && !processing && (
-
-
-<div className="message-box">
-
-
-<h3>
-
-{message}
-
-</h3>
-
-
-</div>
-
-
-)}
-
-
-
-
-</div>
-
-
-
 </div>
 
 
 );
 
 
-
 }
 
 
-
-export default VoiceRegister;
+export default VoiceAuthenticate;

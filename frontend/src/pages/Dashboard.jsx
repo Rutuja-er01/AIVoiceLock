@@ -3,7 +3,6 @@ import "./Dashboard.css";
 import API from "../api/axios";
 import { useNavigate } from "react-router-dom";
 
-
 function Dashboard() {
 
   const [profile, setProfile] = useState(null);
@@ -37,8 +36,6 @@ function Dashboard() {
         );
 
 
-        console.log(response.data);
-
         setProfile(response.data.user);
 
 
@@ -60,7 +57,6 @@ function Dashboard() {
 
     getProfile();
 
-
   }, [navigate]);
 
 
@@ -80,6 +76,8 @@ function Dashboard() {
     <div className="dashboard">
 
 
+      {/* Header */}
+
       <div className="dashboard-header">
 
         <h1>
@@ -88,16 +86,16 @@ function Dashboard() {
 
 
         <p>
-          Monitor voice authentication, security status and system activity in
-          one place.
+          AI powered voice authentication and security monitoring dashboard.
         </p>
 
 
         {
           profile && (
-            <p>
-              Logged in as: {profile.email}
-            </p>
+            <div className="profile-info">
+              Logged in as:
+              <strong> {profile.email}</strong>
+            </div>
           )
         }
 
@@ -105,34 +103,95 @@ function Dashboard() {
 
 
 
+      {/* Dashboard Cards */}
+
       <div className="dashboard-cards">
 
 
         <div className="dashboard-card">
-          <h2>🎙 Voice Profiles</h2>
-          <h3>18</h3>
-          <p>Registered Voice Samples</p>
+
+          <span className="card-icon">
+            🎙️
+          </span>
+
+          <h2>
+            Voice Profiles
+          </h2>
+
+          <h3>
+            18
+          </h3>
+
+          <p>
+            Registered Voice Samples
+          </p>
+
         </div>
 
 
+
         <div className="dashboard-card">
-          <h2>✅ Authentication</h2>
-          <h3>Active</h3>
-          <p>AI Verification Running</p>
+
+          <span className="card-icon">
+            ✅
+          </span>
+
+          <h2>
+            Authentication
+          </h2>
+
+          <h3>
+            Active
+          </h3>
+
+          <p>
+            AI Verification Running
+          </p>
+
         </div>
 
 
+
         <div className="dashboard-card">
-          <h2>📊 Accuracy</h2>
-          <h3>98.4%</h3>
-          <p>Speaker Recognition Accuracy</p>
+
+          <span className="card-icon">
+            📊
+          </span>
+
+          <h2>
+            Accuracy
+          </h2>
+
+          <h3>
+            98.4%
+          </h3>
+
+          <p>
+            Speaker Recognition Accuracy
+          </p>
+
         </div>
 
 
+
         <div className="dashboard-card">
-          <h2>🛡 Security</h2>
-          <h3>Protected</h3>
-          <p>JWT Authentication Enabled</p>
+
+          <span className="card-icon">
+            🛡️
+          </span>
+
+          <h2>
+            Security
+          </h2>
+
+          <h3>
+            Protected
+          </h3>
+
+          <p>
+            JWT Authentication Enabled
+          </p>
+
         </div>
 
 
@@ -141,20 +200,28 @@ function Dashboard() {
 
 
 
-      <div className="recent-activity">
+      {/* Activity Section */}
 
-        <h2>Recent Activity</h2>
+      <div className="dashboard-section">
+
+        <h2>
+          Recent Activity
+        </h2>
 
 
-        <ul>
+        <div className="activity-list">
 
-          <li>✅ User Registered Successfully</li>
-          <li>🎤 Voice Sample Uploaded</li>
-          <li>🤖 Whisper Speech Processing Completed</li>
-          <li>🔐 Identity Verified Successfully</li>
-          <li>📁 MongoDB Database Connected</li>
+          <p>✅ User Registered Successfully</p>
 
-        </ul>
+          <p>🎤 Voice Profile Created</p>
+
+          <p>🤖 Whisper Speech Processing Completed</p>
+
+          <p>🔐 Identity Verified Successfully</p>
+
+          <p>📁 MongoDB Database Connected</p>
+
+        </div>
 
 
       </div>
@@ -162,38 +229,75 @@ function Dashboard() {
 
 
 
-      <div className="system-status">
 
-        <h2>System Status</h2>
+      {/* System Status */}
 
-        <p>🟢 FastAPI Server : Online</p>
-        <p>🟢 MongoDB : Connected</p>
-        <p>🟢 AI Model : Ready</p>
-        <p>🟢 Voice Authentication : Running</p>
+      <div className="dashboard-section">
+
+
+        <h2>
+          System Status
+        </h2>
+
+
+        <div className="status-grid">
+
+          <p>🟢 FastAPI Server : Online</p>
+
+          <p>🟢 MongoDB : Connected</p>
+
+          <p>🟢 AI Model : Ready</p>
+
+          <p>🟢 Voice Authentication : Running</p>
+
+
+        </div>
+
 
       </div>
 
 
 
-      {/* Voice Profile Button */}
+
+      {/* Action Buttons */}
+
+      <div className="voice-actions">
+
+
+        <button
+          className="voice-btn"
+          onClick={() => navigate("/voice-register")}
+        >
+
+          🎙 Create Voice Profile
+
+        </button>
+
+
+
+        <button
+          className="voice-btn"
+          onClick={() => navigate("/voice-auth")}
+        >
+
+          🔐 Authenticate Voice
+
+        </button>
+
+
+      </div>
+
+
 
       <button
-        className="voice-btn"
-        onClick={() => navigate("/voice-register")}
-      >
-        🎙 Create Voice Profile
-      </button>
-
-
-
-      {/* Logout Button */}
-
-      <button 
         className="logout-btn"
         onClick={handleLogout}
       >
+
         Logout
+
       </button>
+
 
 
     </div>

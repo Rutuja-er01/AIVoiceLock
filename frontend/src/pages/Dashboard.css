@@ -1,115 +1,273 @@
-.dashboard{
-    padding:50px 8%;
-    background:#0F172A;
-    min-height:100vh;
-    font-family:Poppins,sans-serif;
-    color:#FFFFFF;
+.dashboard {
+
+    padding: 50px 8%;
+    background: #0F172A;
+    min-height: 100vh;
+    font-family: "Poppins", sans-serif;
+    color: white;
+
 }
 
-.dashboard-header{
-    text-align:center;
-    margin-bottom:50px;
+
+.dashboard-header {
+
+    text-align: center;
+    margin-bottom: 50px;
+
 }
 
-.dashboard-header h1{
-    color:#FFFFFF;
-    font-size:42px;
+
+.dashboard-header h1 {
+
+    font-size: 45px;
+    margin-bottom: 15px;
+
+    background: linear-gradient(
+        90deg,
+        #60A5FA,
+        #38BDF8
+    );
+
+    background-clip: text;
+    -webkit-background-clip: text;
+
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+
 }
 
-.dashboard-header p{
-    color:#CBD5E1;
-    font-size:18px;
+
+.dashboard-header p {
+
+    color: #CBD5E1;
+    font-size: 18px;
+
 }
 
-.dashboard-cards{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+
+.profile-info {
+
+    margin-top: 15px;
+    color: #94A3B8;
+
+}
+
+
+
+.dashboard-cards {
+
+    display: grid;
+
+    grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
+
     gap:25px;
-    margin-bottom:50px;
+
+    margin-bottom:45px;
+
 }
 
-.dashboard-card{
+
+
+.dashboard-card {
+
     background:#1E293B;
+
     padding:30px;
-    border-radius:18px;
-    box-shadow:0 8px 20px rgba(0,0,0,.35);
+
+    border-radius:20px;
+
+    box-shadow:0 10px 25px rgba(0,0,0,0.35);
+
     transition:0.3s;
-    border:1px solid transparent;
+
 }
 
-.dashboard-card:hover{
-    transform:translateY(-6px);
-    border:1px solid #2563EB;
+
+
+.dashboard-card:hover {
+
+    transform:translateY(-8px);
+
 }
 
-.dashboard-card h2{
+
+
+.card-icon {
+
+    font-size:35px;
+
+}
+
+
+
+.dashboard-card h2 {
+
     color:#60A5FA;
-    margin-bottom:15px;
+
 }
 
-.dashboard-card h3{
-    font-size:32px;
-    color:#FFFFFF;
+
+.dashboard-card h3 {
+
+    font-size:35px;
+
+    margin:15px 0;
+
 }
 
-.dashboard-card p{
+
+
+.dashboard-card p {
+
     color:#CBD5E1;
+
 }
 
-.recent-activity,
-.system-status{
+
+
+.dashboard-section {
+
     background:#1E293B;
+
+    padding:30px;
+
     margin-top:30px;
-    padding:30px;
-    border-radius:18px;
-    box-shadow:0 8px 20px rgba(0,0,0,.35);
+
+    border-radius:20px;
+
 }
 
-.recent-activity h2,
-.system-status h2{
+
+
+.dashboard-section h2 {
+
     color:#60A5FA;
-    margin-bottom:20px;
+
 }
 
-.recent-activity ul{
-    padding-left:20px;
-}
 
-.recent-activity li{
-    margin:12px 0;
+
+.activity-list p,
+.status-grid p {
+
     color:#E2E8F0;
+
+    padding:10px 0;
+
 }
 
-.system-status p{
-    margin:12px 0;
-    font-size:18px;
-    color:#CBD5E1;
+
+
+.status-grid {
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+
+    gap:15px;
+
 }
 
-.logout-btn{
-    margin-top:40px;
-    background:#DC2626;
-    color:white;
-    border:none;
-    padding:15px 40px;
-    border-radius:10px;
-    cursor:pointer;
-    font-size:18px;
-    transition:0.3s;
+
+
+.voice-actions {
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:30px;
+
+    margin-top:45px;
+
+    flex-wrap:wrap;
+
 }
 
-.logout-btn:hover{
-    background:#B91C1C;
-    transform:translateY(-3px);
-}
+
+
 .voice-btn {
-  margin-bottom: 20px;
-  padding: 12px 25px;
-  cursor: pointer;
+
+    background:#2563EB;
+
+    color:white;
+
+    border:none;
+
+    padding:15px 35px;
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+    font-size:17px;
+
+    min-width:230px;
+
 }
+
+
+
+.voice-btn:hover {
+
+    background:#1D4ED8;
+
+}
+
+
 
 .logout-btn {
-  margin-top: 10px;
-  padding: 12px 25px;
-  cursor: pointer;
+
+    display:block;
+
+    margin:35px auto 0;
+
+    background:#DC2626;
+
+    color:white;
+
+    border:none;
+
+    padding:14px 45px;
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+    font-size:17px;
+
+}
+
+
+
+.logout-btn:hover {
+
+    background:#B91C1C;
+
+}
+
+
+
+@media(max-width:700px){
+
+    .dashboard {
+
+        padding:30px 5%;
+
+    }
+
+
+    .voice-actions {
+
+        flex-direction:column;
+
+    }
+
+
+    .voice-btn {
+
+        width:100%;
+
+    }
+
 }

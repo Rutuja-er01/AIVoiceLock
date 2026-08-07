@@ -13,28 +13,54 @@ import Dashboard from "./pages/Dashboard";
 import Security from "./pages/Security";
 import Login from "./pages/Login";
 import VoiceRegister from "./pages/VoiceRegister";
+import VoiceAuthenticate from "./pages/VoiceAuthenticate";
+import About from "./pages/About";
+
 
 function App(){
+
 
 return(
 
 <BrowserRouter>
 
+
 <Navbar/>
+
 
 <Routes>
 
+
 <Route path="/" element={<Home/>}/>
+
 
 <Route path="/register" element={<Register/>}/>
 
+
 <Route path="/dashboard" element={<Dashboard/>}/>
 
-<Route path="/security" element={<Security />} />
-<Route path="/login" element={<Login />} />
-<Route
- path="/voice-register"
- element={<VoiceRegister />}
+
+<Route path="/security" element={<Security/>}/>
+
+
+<Route path="/login" element={<Login/>}/>
+
+
+<Route 
+path="/voice-register"
+element={<VoiceRegister/>}
+/>
+
+
+<Route 
+path="/voice-auth"
+element={<VoiceAuthenticate/>}
+/>
+
+
+<Route 
+path="/about"
+element={<About/>}
 />
 
 

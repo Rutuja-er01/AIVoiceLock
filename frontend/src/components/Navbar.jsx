@@ -1,46 +1,63 @@
 import { Link } from "react-router-dom";
 import "./Navbar.css";
 
+
 function Navbar() {
 
-  return (
 
-    <nav className="navbar">
+return (
 
-      <div className="logo">
-        🎙 VoiceLock AI
-      </div>
+<nav className="navbar">
 
-      <div className="nav-links">
 
-        <Link to="/">Home</Link>
+<div className="logo">
+🎙 VoiceLock AI
+</div>
 
-        <Link to="/dashboard">
-          Dashboard
-        </Link>
 
-        <Link to="/security">
-          Security
-        </Link>
 
-        <Link to="/register">
-          Register
-        </Link>
+<div className="nav-links">
 
-        <Link to="/login">
-          Login
-        </Link>
 
-      </div>
+<Link to="/">
+Home
+</Link>
 
-      <button className="theme-btn">
-        🌙
-      </button>
 
-    </nav>
+<Link to="/about">
+About
+</Link>
 
-  );
+
+<Link to="/dashboard">
+Dashboard
+</Link>
+
+
+<Link to="/security">
+Security
+</Link>
+
+
+<Link to="/register">
+Register
+</Link>
+
+
+<Link to="/login">
+Login
+</Link>
+
+
+</div>
+
+
+</nav>
+
+);
+
 
 }
+
 
 export default Navbar;

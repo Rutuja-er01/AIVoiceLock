@@ -93,3 +93,17 @@ button {
 button:hover {
   background: white;
 }
+body{
+
+margin:0;
+
+transition:0.4s;
+
+}
+
+
+body.light-mode{
+
+background:white;
+
+}

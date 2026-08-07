@@ -1,163 +1,143 @@
 import "./Home.css";
+import { useNavigate } from "react-router-dom";
+import image1 from "../assets/image1.png";
 
 function Home() {
 
-return (
+  const navigate = useNavigate();
 
-<div className="home">
+  return (
+    <div className="home">
 
+      <section className="hero">
 
-<section className="hero">
+        <div className="hero-text">
 
-<div className="hero-text">
+          <h1>
+            AI VoiceLock
+          </h1>
 
-<h1>
-AI VoiceLock
-</h1>
+          <h2>
+            Your Voice is Your Password
+          </h2>
 
-<h2>
-Your Voice is Your Password
-</h2>
-
-
-<p>
-Secure authentication system using 
-Artificial Intelligence and Voice Recognition.
-</p>
-
-
-<div className="buttons">
-
-<button>
-Get Started
-</button>
+          <p>
+            Secure authentication system using
+            Artificial Intelligence and Voice Recognition.
+          </p>
 
 
-<button className="secondary">
-Learn More
-</button>
+          <div className="buttons">
 
-</div>
-
-
-</div>
-
+            <button
+              onClick={() => navigate("/register")}
+            >
+              Get Started
+            </button>
 
 
-<div className="hero-image">
+            <button
+              className="secondary"
+              onClick={() => navigate("/about")}
+            >
+              Learn More
+            </button>
 
-<img 
-src="https://cdn-icons-png.flaticon.com/512/2956/2956744.png"
-alt="voice"
+
+          </div>
+
+        </div>
+
+
+
+        <div className="hero-image">
+
+          <img
+src={image1}
+alt="Voice AI"
 />
 
-</div>
+        </div>
 
 
-</section>
-
-
-
-<section className="features">
-
-
-<h1>
-Powerful Features
-</h1>
-
-
-<div className="cards">
-
-
-<div className="card">
-
-<h2>🎙 Voice Recognition</h2>
-
-<p>
-AI identifies users through unique voice patterns.
-</p>
-
-</div>
+      </section>
 
 
 
-<div className="card">
+      <section className="features">
 
-<h2>🔐 Secure Login</h2>
-
-<p>
-Multi-factor authentication for better security.
-</p>
-
-</div>
+        <h1>
+          Powerful Features
+        </h1>
 
 
+        <div className="cards">
 
 
-<div className="card">
+          <div className="card">
 
-<h2>🤖 AI Powered</h2>
+            <h2>🎙 Voice Recognition</h2>
 
-<p>
-Machine learning models verify identity.
-</p>
+            <p>
+              AI identifies users through unique voice patterns.
+            </p>
 
-</div>
+          </div>
 
 
 
-</div>
+          <div className="card">
 
+            <h2>🔐 Secure Login</h2>
 
-</section>
+            <p>
+              Multi-factor authentication for better security.
+            </p>
 
-
-
-
-<section className="working">
-
-<h1>
-How It Works
-</h1>
-
-
-<p>
-1. User speaks passphrase
-</p>
-
-<p>
-⬇
-</p>
-
-<p>
-2. AI extracts voice features
-</p>
-
-<p>
-⬇
-</p>
-
-<p>
-3. System verifies identity
-</p>
-
-<p>
-⬇
-</p>
-
-<p>
-4. Access granted
-</p>
-
-
-</section>
+          </div>
 
 
 
-</div>
+          <div className="card">
 
-);
+            <h2>🤖 AI Powered</h2>
 
+            <p>
+              Machine learning models verify identity.
+            </p>
+
+          </div>
+
+
+        </div>
+
+      </section>
+
+
+
+      <section className="working">
+
+        <h1>
+          How It Works
+        </h1>
+
+        <p>1. User speaks passphrase</p>
+        <p>⬇</p>
+
+        <p>2. AI extracts voice features</p>
+        <p>⬇</p>
+
+        <p>3. System verifies identity</p>
+        <p>⬇</p>
+
+        <p>4. Access granted</p>
+
+
+      </section>
+
+
+    </div>
+  );
 }
 
 
