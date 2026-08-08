@@ -1,11 +1,10 @@
 import Navbar from "./components/Navbar";
 
 import {
-BrowserRouter,
-Routes,
-Route
+  BrowserRouter,
+  Routes,
+  Route
 } from "react-router-dom";
-
 
 import Home from "./pages/Home";
 import Register from "./pages/Register";
@@ -14,64 +13,80 @@ import Security from "./pages/Security";
 import Login from "./pages/Login";
 import VoiceRegister from "./pages/VoiceRegister";
 import VoiceAuthenticate from "./pages/VoiceAuthenticate";
+import VoiceProfile from "./pages/VoiceProfile";
 import About from "./pages/About";
 
 
-function App(){
+function App() {
 
+  return (
 
-return(
+    <BrowserRouter>
 
-<BrowserRouter>
+      <Navbar />
 
+      <Routes>
 
-<Navbar/>
+        {/* Home */}
+        <Route
+          path="/"
+          element={<Home />}
+        />
 
+        {/* User Registration */}
+        <Route
+          path="/register"
+          element={<Register />}
+        />
 
-<Routes>
+        {/* Login */}
+        <Route
+          path="/login"
+          element={<Login />}
+        />
 
+        {/* Dashboard */}
+        <Route
+          path="/dashboard"
+          element={<Dashboard />}
+        />
 
-<Route path="/" element={<Home/>}/>
+        {/* Security */}
+        <Route
+          path="/security"
+          element={<Security />}
+        />
 
+        {/* Voice Registration */}
+        <Route
+          path="/voice-register"
+          element={<VoiceRegister />}
+        />
 
-<Route path="/register" element={<Register/>}/>
+        {/* Voice Profile */}
+        <Route
+          path="/voice-profile"
+          element={<VoiceProfile />}
+        />
 
+        {/* Voice Authentication */}
+        <Route
+          path="/voice-auth"
+          element={<VoiceAuthenticate />}
+        />
 
-<Route path="/dashboard" element={<Dashboard/>}/>
+        {/* About */}
+        <Route
+          path="/about"
+          element={<About />}
+        />
 
+      </Routes>
 
-<Route path="/security" element={<Security/>}/>
+    </BrowserRouter>
 
-
-<Route path="/login" element={<Login/>}/>
-
-
-<Route 
-path="/voice-register"
-element={<VoiceRegister/>}
-/>
-
-
-<Route 
-path="/voice-auth"
-element={<VoiceAuthenticate/>}
-/>
-
-
-<Route 
-path="/about"
-element={<About/>}
-/>
-
-
-</Routes>
-
-
-</BrowserRouter>
-
-)
+  );
 
 }
-
 
 export default App;

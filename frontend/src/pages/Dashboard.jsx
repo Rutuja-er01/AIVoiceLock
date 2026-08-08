@@ -4,20 +4,17 @@ import API from "../api/axios";
 import { useNavigate } from "react-router-dom";
 
 function Dashboard() {
-
   const [profile, setProfile] = useState(null);
+  const [dashboard, setDashboard] = useState(null);
+  const [history, setHistory] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
 
-
   useEffect(() => {
-
-    const getProfile = async () => {
-
+    const getDashboardData = async () => {
       try {
-
         const token = localStorage.getItem("token");
-
 
         if (!token) {
           alert("Please login first");
@@ -25,56 +22,106 @@ function Dashboard() {
           return;
         }
 
+        // Get user profile
+        const profileResponse = await API.get("/profile");
 
-        const response = await API.get(
-          "/profile",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          }
-        );
+        setProfile(profileResponse.data.user);
 
+        // Get dashboard statistics
+        const dashboardResponse = await API.get("/dashboard");
 
-        setProfile(response.data.user);
+        setDashboard(dashboardResponse.data);
 
+        // Get authentication history
+        const historyResponse = await API.get("/voice/history");
 
-      }
-      catch(error){
+        // Show newest records first
+        const sortedHistory = [...historyResponse.data].reverse();
 
-        console.log(error);
+        setHistory(sortedHistory);
 
-        alert("Session expired. Please login again");
+      } catch (error) {
+        console.log("Dashboard error:", error);
 
         localStorage.removeItem("token");
 
+        alert("Session expired. Please login again");
+
         navigate("/login");
 
+      } finally {
+        setLoading(false);
       }
-
     };
 
-
-    getProfile();
+    getDashboardData();
 
   }, [navigate]);
 
 
-
   const handleLogout = () => {
-
     localStorage.removeItem("token");
-
     navigate("/login");
+  };
+
+
+  // Calculate accuracy
+  const accuracy =
+    dashboard && dashboard.total_verifications > 0
+      ? (
+          (dashboard.successful_verifications /
+            dashboard.total_verifications) *
+          100
+        ).toFixed(1)
+      : "0.0";
+
+
+  // Format date
+  const formatDate = (date) => {
+
+    if (!date) {
+      return "Unknown time";
+    }
+
+    try {
+
+      return new Date(date).toLocaleString();
+
+    } catch {
+
+      return "Unknown time";
+
+    }
 
   };
 
+
+  if (loading) {
+
+    return (
+      <div className="dashboard">
+
+        <div className="dashboard-header">
+
+          <h1>
+            Loading Dashboard...
+          </h1>
+
+          <p>
+            Fetching your security information.
+          </p>
+
+        </div>
+
+      </div>
+    );
+
+  }
 
 
   return (
 
     <div className="dashboard">
-
 
       {/* Header */}
 
@@ -84,20 +131,20 @@ function Dashboard() {
           Welcome {profile?.name || "to VoiceLock AI"} 👋
         </h1>
 
-
         <p>
           AI powered voice authentication and security monitoring dashboard.
         </p>
 
+        {profile && (
 
-        {
-          profile && (
-            <div className="profile-info">
-              Logged in as:
-              <strong> {profile.email}</strong>
-            </div>
-          )
-        }
+          <div className="profile-info">
+
+            Logged in as:
+            <strong> {profile.email}</strong>
+
+          </div>
+
+        )}
 
       </div>
 
@@ -107,6 +154,8 @@ function Dashboard() {
 
       <div className="dashboard-cards">
 
+
+        {/* Voice Profiles */}
 
         <div className="dashboard-card">
 
@@ -119,7 +168,7 @@ function Dashboard() {
           </h2>
 
           <h3>
-            18
+            {dashboard?.total_voice_samples ?? 0}
           </h3>
 
           <p>
@@ -129,6 +178,8 @@ function Dashboard() {
         </div>
 
 
+
+        {/* Authentication */}
 
         <div className="dashboard-card">
 
@@ -141,7 +192,9 @@ function Dashboard() {
           </h2>
 
           <h3>
-            Active
+            {dashboard?.system_status === "Running"
+              ? "Active"
+              : "Offline"}
           </h3>
 
           <p>
@@ -151,6 +204,8 @@ function Dashboard() {
         </div>
 
 
+
+        {/* Accuracy */}
 
         <div className="dashboard-card">
 
@@ -163,16 +218,18 @@ function Dashboard() {
           </h2>
 
           <h3>
-            98.4%
+            {accuracy}%
           </h3>
 
           <p>
-            Speaker Recognition Accuracy
+            Based on authentication history
           </p>
 
         </div>
 
 
+
+        {/* Security */}
 
         <div className="dashboard-card">
 
@@ -185,7 +242,7 @@ function Dashboard() {
           </h2>
 
           <h3>
-            Protected
+            {profile ? "Protected" : "Unknown"}
           </h3>
 
           <p>
@@ -194,39 +251,120 @@ function Dashboard() {
 
         </div>
 
-
       </div>
 
 
 
-
-      {/* Activity Section */}
+      {/* Authentication Statistics */}
 
       <div className="dashboard-section">
 
         <h2>
-          Recent Activity
+          Authentication Statistics
         </h2>
 
+        <div className="status-grid">
 
-        <div className="activity-list">
+          <p>
+            👥 Registered Users:
+            <strong>
+              {" "}
+              {dashboard?.total_users ?? 0}
+            </strong>
+          </p>
 
-          <p>✅ User Registered Successfully</p>
+          <p>
+            🎙️ Voice Samples:
+            <strong>
+              {" "}
+              {dashboard?.total_voice_samples ?? 0}
+            </strong>
+          </p>
 
-          <p>🎤 Voice Profile Created</p>
+          <p>
+            🔐 Total Verifications:
+            <strong>
+              {" "}
+              {dashboard?.total_verifications ?? 0}
+            </strong>
+          </p>
 
-          <p>🤖 Whisper Speech Processing Completed</p>
+          <p>
+            ✅ Successful:
+            <strong>
+              {" "}
+              {dashboard?.successful_verifications ?? 0}
+            </strong>
+          </p>
 
-          <p>🔐 Identity Verified Successfully</p>
-
-          <p>📁 MongoDB Database Connected</p>
+          <p>
+            ❌ Failed:
+            <strong>
+              {" "}
+              {dashboard?.failed_verifications ?? 0}
+            </strong>
+          </p>
 
         </div>
-
 
       </div>
 
 
+
+      {/* REAL Recent Activity */}
+
+      <div className="dashboard-section">
+
+        <h2>
+          Recent Authentication Activity
+        </h2>
+
+
+        {history.length === 0 ? (
+
+          <div className="activity-list">
+
+            <p>
+              📭 No authentication activity yet.
+            </p>
+
+          </div>
+
+        ) : (
+
+          <div className="activity-list">
+
+            {history.slice(0, 10).map((item, index) => (
+
+              <p key={index}>
+
+                {item.status === "Access Granted"
+                  ? "✅"
+                  : "❌"}
+
+                {" "}
+
+                <strong>
+                  {item.status}
+                </strong>
+
+                {" — "}
+
+                {item.email || item.speaker}
+
+                {" — "}
+
+                {formatDate(item.timestamp)}
+
+              </p>
+
+            ))}
+
+          </div>
+
+        )}
+
+      </div>
 
 
 
@@ -234,77 +372,70 @@ function Dashboard() {
 
       <div className="dashboard-section">
 
-
         <h2>
           System Status
         </h2>
 
-
         <div className="status-grid">
 
-          <p>🟢 FastAPI Server : Online</p>
+          <p>
+            🟢 FastAPI Server : Online
+          </p>
 
-          <p>🟢 MongoDB : Connected</p>
+          <p>
+            🟢 MongoDB : Connected
+          </p>
 
-          <p>🟢 AI Model : Ready</p>
+          <p>
+            🟢 AI Model : Ready
+          </p>
 
-          <p>🟢 Voice Authentication : Running</p>
-
+          <p>
+            🟢 Voice Authentication : Running
+          </p>
 
         </div>
-
 
       </div>
 
 
 
-
-      {/* Action Buttons */}
+      {/* Actions */}
 
       <div className="voice-actions">
-
 
         <button
           className="voice-btn"
           onClick={() => navigate("/voice-register")}
         >
-
           🎙 Create Voice Profile
-
         </button>
-
 
 
         <button
           className="voice-btn"
           onClick={() => navigate("/voice-auth")}
         >
-
           🔐 Authenticate Voice
-
         </button>
-
 
       </div>
 
 
 
+      {/* Logout */}
+
       <button
         className="logout-btn"
         onClick={handleLogout}
       >
-
         Logout
-
       </button>
-
-
 
     </div>
 
   );
 
 }
-
 
 export default Dashboard;

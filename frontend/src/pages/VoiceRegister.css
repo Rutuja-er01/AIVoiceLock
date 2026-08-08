@@ -1,313 +1,513 @@
-.voice-register-page{
+/* =========================================================
+   VOICE REGISTER PAGE
+   ========================================================= */
 
-min-height:100vh;
+.voice-register-page {
+    min-height: 100vh;
 
-background:
-linear-gradient(
-135deg,
-#020617,
-#0f172a,
-#1e3a8a
-);
+    background:
+        radial-gradient(
+            circle at top,
+            #1e3a8a 0%,
+            #0f172a 45%,
+            #020617 100%
+        );
 
-display:flex;
+    color: white;
 
-justify-content:center;
+    font-family: "Inter", "Poppins", sans-serif;
 
-align-items:center;
+    padding: 120px 20px 60px;
 
-padding:40px;
+    box-sizing: border-box;
 
-font-family:"Inter",sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
+    position: relative;
 }
 
 
+/* =========================================================
+   BACK TO DASHBOARD BUTTON
+   ========================================================= */
 
-.voice-register-card{
+.voice-register-page .voice-register-back-btn {
+    position: absolute;
 
-width:500px;
+    top: 90px;
+    left: 8%;
 
-background:rgba(15,23,42,0.85);
+    width: auto;
+    min-width: 190px;
 
-backdrop-filter:blur(15px);
+    padding: 11px 20px;
 
-padding:45px;
+    border: none;
+    border-radius: 10px;
 
-border-radius:30px;
+    background: #334155;
+    color: white;
 
-text-align:center;
+    font-size: 15px;
+    font-weight: 600;
 
-box-shadow:
-0 25px 60px rgba(0,0,0,0.5);
+    cursor: pointer;
 
-border:
-1px solid rgba(96,165,250,0.3);
+    transition: 0.3s;
 
+    z-index: 5;
+}
+
+.voice-register-page .voice-register-back-btn:hover {
+    background: #475569;
+    transform: translateY(-2px);
 }
 
 
+/* =========================================================
+   HEADER
+   ========================================================= */
 
-.voice-logo{
+.voice-register-header {
+    width: 100%;
+    max-width: 750px;
 
-height:120px;
+    text-align: center;
 
-width:120px;
-
-margin:auto;
-
-border-radius:50%;
-
-display:flex;
-
-align-items:center;
-
-justify-content:center;
-
-font-size:60px;
-
-background:
-linear-gradient(
-135deg,
-#2563eb,
-#38bdf8
-);
-
-box-shadow:
-0 0 40px rgba(56,189,248,0.6);
-
+    margin-bottom: 35px;
 }
 
 
+/* Microphone icon */
 
+.voice-icon {
+    width: 100px;
+    height: 100px;
 
-.voice-register-card h1{
+    margin: 0 auto 20px;
 
-color:white;
+    border-radius: 50%;
 
-font-size:38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-margin-top:30px;
+    font-size: 50px;
 
+    background:
+        linear-gradient(
+            135deg,
+            #2563eb,
+            #38bdf8
+        );
+
+    box-shadow:
+        0 0 40px rgba(56, 189, 248, 0.45);
 }
 
 
+/* Heading */
 
-.voice-register-card p{
+.voice-register-header h1 {
+    margin: 0 0 12px;
 
-color:#cbd5e1;
+    font-size: 42px;
+    font-weight: 700;
 
-font-size:17px;
+    background:
+        linear-gradient(
+            90deg,
+            #60a5fa,
+            #38bdf8
+        );
 
-line-height:1.6;
+    -webkit-background-clip: text;
+    background-clip: text;
 
-margin-bottom:35px;
-
+    color: transparent;
 }
 
 
+/* Description */
 
-/* Start Button */
+.voice-register-header p {
+    margin: 0;
 
+    color: #cbd5e1;
 
-.record-btn{
+    font-size: 17px;
 
-width:85%;
-
-padding:17px;
-
-border:none;
-
-border-radius:15px;
-
-background:
-linear-gradient(
-90deg,
-#2563eb,
-#06b6d4
-);
-
-
-color:white;
-
-font-size:18px;
-
-font-weight:600;
-
-cursor:pointer;
-
-transition:.3s;
-
+    line-height: 1.6;
 }
 
 
+/* =========================================================
+   MAIN CARD
+   ========================================================= */
 
-.record-btn:hover{
+.voice-register-card {
+    width: 100%;
+    max-width: 620px;
 
-transform:translateY(-5px);
+    box-sizing: border-box;
 
-box-shadow:
-0 15px 30px rgba(37,99,235,.5);
+    background:
+        rgba(30, 41, 59, 0.92);
 
+    backdrop-filter: blur(15px);
+
+    padding: 40px;
+
+    border-radius: 24px;
+
+    text-align: center;
+
+    border: 1px solid rgba(96, 165, 250, 0.25);
+
+    box-shadow:
+        0 20px 50px rgba(0, 0, 0, 0.45);
 }
 
 
+/* =========================================================
+   CARD HEADING
+   ========================================================= */
 
-/* Recording */
+.voice-register-card h2 {
+    margin: 0 0 12px;
 
+    color: #60a5fa;
 
-.recording-area h2{
-
-color:#f87171;
-
+    font-size: 27px;
 }
 
 
+/* Card paragraph */
 
-.pulse{
+.voice-register-card p {
+    color: #cbd5e1;
 
-font-size:50px;
+    font-size: 16px;
 
-animation:pulse 1s infinite;
+    line-height: 1.6;
 
+    margin-bottom: 28px;
 }
 
 
+/* =========================================================
+   START RECORDING BUTTON
+   ========================================================= */
 
-.timer{
+.record-btn {
+    width: 85%;
 
-font-size:45px;
+    padding: 16px 25px;
 
-font-weight:bold;
+    border: none;
 
-color:white;
+    border-radius: 14px;
 
-margin:25px;
+    background:
+        linear-gradient(
+            90deg,
+            #2563eb,
+            #06b6d4
+        );
 
+    color: white;
+
+    font-size: 17px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+.record-btn:hover {
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 12px 30px rgba(37, 99, 235, 0.45);
 }
 
 
+/* =========================================================
+   RECORDING SECTION
+   ========================================================= */
 
-.stop-btn{
-
-width:85%;
-
-padding:17px;
-
-border:none;
-
-border-radius:15px;
-
-background:#dc2626;
-
-color:white;
-
-font-size:18px;
-
-font-weight:600;
-
-cursor:pointer;
-
+.recording-section {
+    text-align: center;
 }
 
 
+.recording-icon {
+    font-size: 55px;
 
-.stop-btn:hover{
+    margin-bottom: 10px;
 
-background:#b91c1c;
-
+    animation: recordingPulse 1.2s infinite;
 }
 
 
-
-/* Processing */
-
-
-.processing h2{
-
-color:#38bdf8;
-
+.recording-section h2 {
+    color: #f87171;
 }
 
 
-
-.processing p{
-
-color:#cbd5e1;
-
+.recording-section p {
+    margin-bottom: 25px;
 }
 
 
+/* Timer */
 
-/* Message */
+.recording-time {
+    font-size: 45px;
 
+    font-weight: 700;
 
-.message-box{
+    color: white;
 
-margin-top:30px;
+    margin: 20px 0 25px;
 
-padding:20px;
-
-border-radius:15px;
-
-background:#334155;
-
+    letter-spacing: 3px;
 }
 
 
+/* =========================================================
+   STOP BUTTON
+   ========================================================= */
 
-.message-box h3{
+.stop-btn {
+    width: 85%;
 
-color:white;
+    padding: 16px 25px;
 
-font-size:17px;
+    border: none;
 
+    border-radius: 14px;
+
+    background: #dc2626;
+
+    color: white;
+
+    font-size: 17px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.3s;
 }
 
 
+.stop-btn:hover {
+    background: #b91c1c;
 
+    transform: translateY(-3px);
 
-@keyframes pulse{
-
-0%{
-
-transform:scale(1);
-
+    box-shadow:
+        0 10px 25px rgba(220, 38, 38, 0.35);
 }
 
 
-50%{
+/* =========================================================
+   PROCESSING
+   ========================================================= */
 
-transform:scale(1.2);
-
+.processing-section {
+    text-align: center;
 }
 
 
-100%{
+.processing-icon {
+    font-size: 55px;
 
-transform:scale(1);
+    margin-bottom: 10px;
 
-}
-
-}
-
-
-
-@media(max-width:600px){
-
-.voice-register-card{
-
-width:90%;
-
-padding:30px;
-
+    animation: processingPulse 1.2s infinite;
 }
 
 
-.voice-register-card h1{
-
-font-size:30px;
-
+.processing-section h2 {
+    color: #38bdf8;
 }
 
+
+.processing-section p {
+    color: #cbd5e1;
+}
+
+
+/* =========================================================
+   SUCCESS / ERROR MESSAGE
+   ========================================================= */
+
+.voice-message {
+    margin-top: 25px;
+
+    padding: 15px 20px;
+
+    border-radius: 12px;
+
+    background: #334155;
+
+    color: #e2e8f0;
+
+    font-size: 15px;
+
+    line-height: 1.5;
+
+    border: 1px solid #475569;
+}
+
+
+/* =========================================================
+   VIEW PROFILE BUTTON
+   ========================================================= */
+
+.profile-btn {
+    margin-top: 25px;
+
+    width: 100%;
+    max-width: 620px;
+
+    padding: 14px 25px;
+
+    border: 1px solid #2563eb;
+
+    border-radius: 12px;
+
+    background: transparent;
+
+    color: #60a5fa;
+
+    font-size: 16px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+
+.profile-btn:hover {
+    background: #2563eb;
+
+    color: white;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 10px 25px rgba(37, 99, 235, 0.3);
+}
+
+
+/* =========================================================
+   ANIMATIONS
+   ========================================================= */
+
+@keyframes recordingPulse {
+
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.15);
+        opacity: 0.7;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+
+@keyframes processingPulse {
+
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.12);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+    .voice-register-page {
+        padding:
+            110px
+            15px
+            40px;
+    }
+
+
+    .voice-register-page .back-btn {
+        position: static;
+
+        align-self: flex-start;
+
+        margin-bottom: 25px;
+
+        min-width: auto;
+    }
+
+
+    .voice-register-header h1 {
+        font-size: 32px;
+    }
+
+
+    .voice-register-header p {
+        font-size: 15px;
+    }
+
+
+    .voice-register-card {
+        padding: 30px 20px;
+    }
+
+
+    .voice-icon {
+        width: 85px;
+        height: 85px;
+
+        font-size: 42px;
+    }
+
+
+    .record-btn,
+    .stop-btn {
+        width: 100%;
+    }
+
+
+    .recording-time {
+        font-size: 38px;
+    }
+
+
+    .profile-btn {
+        width: 100%;
+    }
 }
