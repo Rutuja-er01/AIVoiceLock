@@ -1,7 +1,7 @@
 from fastapi import APIRouter, UploadFile, File, Depends
 
 from utils.auth_dependency import get_current_user
-from config.database import voice_collection
+from config.database import voice_collection, history_collection
 
 from ai.voice_authenticator import authenticate
 from ai.voice_register import create_voice_embedding
@@ -109,18 +109,17 @@ def verify_voice(
     if voice is None:
 
         return {
-
             "access": False,
-
             "message": "No voice profile found. Please create your voice profile first."
-
         }
+
 
     # Temporary authentication file
     file_path = os.path.join(
         UPLOAD_FOLDER,
         f"verify_{email}_{file.filename}"
     )
+
 
     # Save authentication recording
     with open(file_path, "wb") as buffer:
@@ -130,15 +129,36 @@ def verify_voice(
             buffer
         )
 
+
     try:
 
-        # Authenticate against user's registered embedding
+        # Authenticate against registered voice
         result = authenticate(
             file_path,
             voice["embedding"]
         )
 
+
+        # -----------------------------------------
+        # ACCESS GRANTED
+        # -----------------------------------------
+
         if result["access"]:
+
+            history_collection.insert_one({
+
+                "email": email,
+
+                "speaker": email,
+
+                "status": "Access Granted",
+
+                "similarity": result["similarity"],
+
+                "timestamp": datetime.now(UTC)
+
+            })
+
 
             return {
 
@@ -152,7 +172,27 @@ def verify_voice(
 
             }
 
+
+        # -----------------------------------------
+        # ACCESS DENIED
+        # -----------------------------------------
+
         else:
+
+            history_collection.insert_one({
+
+                "email": email,
+
+                "speaker": email,
+
+                "status": "Access Denied",
+
+                "similarity": result["similarity"],
+
+                "timestamp": datetime.now(UTC)
+
+            })
+
 
             return {
 
@@ -166,9 +206,10 @@ def verify_voice(
 
             }
 
+
     finally:
 
-        # Delete temporary verification recording
+        # Delete temporary authentication recording
         if os.path.exists(file_path):
 
             os.remove(file_path)
