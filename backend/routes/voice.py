@@ -1,10 +1,20 @@
 from fastapi import APIRouter, UploadFile, File, Depends
 
 from utils.auth_dependency import get_current_user
-from config.database import voice_collection, history_collection
+
+from config.database import (
+    voice_collection,
+    history_collection
+)
 
 from ai.voice_authenticator import authenticate
+
 from ai.voice_register import create_voice_embedding
+
+from ai.speech_to_text import (
+    speech_to_text,
+    normalize_phrase
+)
 
 import shutil
 import os
@@ -29,43 +39,108 @@ os.makedirs(
 
 @router.post("/upload")
 def upload_voice(
+
     file: UploadFile = File(...),
+
     current_user=Depends(get_current_user)
+
 ):
 
     email = current_user["email"]
 
-    # Check if voice already exists
+
+    # =====================================================
+    # CHECK IF VOICE ALREADY EXISTS
+    # =====================================================
+
     existing_voice = voice_collection.find_one(
-        {"email": email}
+        {
+            "email": email
+        }
     )
+
 
     if existing_voice:
 
         return {
-            "message": "Voice already exists. Please use Update Voice."
+
+            "message":
+            "Voice already exists. Please use Update Voice."
+
         }
 
-    # Create unique file path
+
+    # =====================================================
+    # CREATE FILE PATH
+    # =====================================================
+
     file_path = os.path.join(
+
         UPLOAD_FOLDER,
+
         f"{email}_{file.filename}"
+
     )
 
-    # Save audio
-    with open(file_path, "wb") as buffer:
+
+    # =====================================================
+    # SAVE AUDIO
+    # =====================================================
+
+    with open(
+        file_path,
+        "wb"
+    ) as buffer:
 
         shutil.copyfileobj(
             file.file,
             buffer
         )
 
-    # Create voice embedding
+
+    # =====================================================
+    # DETECT REGISTERED PHRASE
+    # =====================================================
+
+    registered_phrase = speech_to_text(
+        file_path
+    )
+
+
+    registered_phrase = registered_phrase.strip()
+
+
+    # =====================================================
+    # CHECK EMPTY PHRASE
+    # =====================================================
+
+    if not registered_phrase:
+
+        if os.path.exists(file_path):
+
+            os.remove(file_path)
+
+        return {
+
+            "message":
+            "Could not detect a voice phrase. Please record again."
+
+        }
+
+
+    # =====================================================
+    # CREATE VOICE EMBEDDING
+    # =====================================================
+
     embedding = create_voice_embedding(
         file_path
     )
 
-    # Save voice profile
+
+    # =====================================================
+    # SAVE VOICE PROFILE
+    # =====================================================
+
     voice_collection.insert_one({
 
         "email": email,
@@ -76,15 +151,28 @@ def upload_voice(
 
         "embedding": embedding,
 
+        "phrase": registered_phrase,
+
+        "phrase_normalized":
+        normalize_phrase(
+            registered_phrase
+        ),
+
         "uploaded_at": datetime.now(UTC)
 
     })
 
+
     return {
 
-        "message": "Voice profile created successfully",
+        "message":
+        "Voice profile created successfully",
 
-        "file": file.filename
+        "file":
+        file.filename,
+
+        "phrase":
+        registered_phrase
 
     }
 
@@ -95,53 +183,116 @@ def upload_voice(
 
 @router.post("/verify")
 def verify_voice(
+
     file: UploadFile = File(...),
+
     current_user=Depends(get_current_user)
+
 ):
 
     email = current_user["email"]
 
-    # Find registered voice
+
+    # =====================================================
+    # FIND REGISTERED VOICE
+    # =====================================================
+
     voice = voice_collection.find_one(
-        {"email": email}
+
+        {
+            "email": email
+        }
+
     )
+
 
     if voice is None:
 
         return {
+
             "access": False,
-            "message": "No voice profile found. Please create your voice profile first."
+
+            "message":
+            "No voice profile found. Please create your voice profile first."
+
         }
 
 
-    # Temporary authentication file
-    file_path = os.path.join(
-        UPLOAD_FOLDER,
-        f"verify_{email}_{file.filename}"
+    # =====================================================
+    # CHECK REGISTERED PHRASE
+    # =====================================================
+
+    registered_phrase = voice.get(
+        "phrase"
     )
 
 
-    # Save authentication recording
-    with open(file_path, "wb") as buffer:
+    if not registered_phrase:
+
+        return {
+
+            "access": False,
+
+            "message":
+            "Your voice profile does not have a registered phrase. Please delete and create your voice profile again."
+
+        }
+
+
+    # =====================================================
+    # TEMPORARY AUTHENTICATION FILE
+    # =====================================================
+
+    file_path = os.path.join(
+
+        UPLOAD_FOLDER,
+
+        f"verify_{email}_{file.filename}"
+
+    )
+
+
+    # =====================================================
+    # SAVE AUTHENTICATION RECORDING
+    # =====================================================
+
+    with open(
+
+        file_path,
+
+        "wb"
+
+    ) as buffer:
 
         shutil.copyfileobj(
+
             file.file,
+
             buffer
+
         )
 
 
     try:
 
-        # Authenticate against registered voice
+        # =================================================
+        # VOICE + PERSONAL PHRASE AUTHENTICATION
+        # =================================================
+
         result = authenticate(
+
             file_path,
-            voice["embedding"]
+
+            voice["path"],
+
+            registered_phrase
+
         )
 
 
-        # -----------------------------------------
+        # =================================================
         # ACCESS GRANTED
-        # -----------------------------------------
+        # =================================================
 
         if result["access"]:
 
@@ -151,11 +302,17 @@ def verify_voice(
 
                 "speaker": email,
 
-                "status": "Access Granted",
+                "status":
+                "Access Granted",
 
-                "similarity": result["similarity"],
+                "similarity":
+                result["similarity"],
 
-                "timestamp": datetime.now(UTC)
+                "phrase":
+                result["phrase"],
+
+                "timestamp":
+                datetime.now(UTC)
 
             })
 
@@ -164,18 +321,30 @@ def verify_voice(
 
                 "access": True,
 
-                "message": "Access Granted",
+                "message":
+                "Access Granted",
 
-                "speaker": "Verified User",
+                "speaker":
+                "Verified User",
 
-                "similarity": result["similarity"]
+                "similarity":
+                result["similarity"],
+
+                "threshold":
+                result["threshold"],
+
+                "speaker_match":
+                result["speaker_match"],
+
+                "phrase":
+                result["phrase"]
 
             }
 
 
-        # -----------------------------------------
+        # =================================================
         # ACCESS DENIED
-        # -----------------------------------------
+        # =================================================
 
         else:
 
@@ -185,11 +354,17 @@ def verify_voice(
 
                 "speaker": email,
 
-                "status": "Access Denied",
+                "status":
+                "Access Denied",
 
-                "similarity": result["similarity"],
+                "similarity":
+                result["similarity"],
 
-                "timestamp": datetime.now(UTC)
+                "phrase":
+                result["phrase"],
+
+                "timestamp":
+                datetime.now(UTC)
 
             })
 
@@ -198,144 +373,290 @@ def verify_voice(
 
                 "access": False,
 
-                "message": "Access Denied",
+                "message":
+                "Access Denied",
 
-                "speaker": "Speaker is different",
+                "speaker":
+                "Speaker or phrase is incorrect",
 
-                "similarity": result["similarity"]
+                "similarity":
+                result["similarity"],
+
+                "threshold":
+                result["threshold"],
+
+                "speaker_match":
+                result["speaker_match"],
+
+                "phrase":
+                result["phrase"]
 
             }
 
 
     finally:
 
-        # Delete temporary authentication recording
+        # =================================================
+        # DELETE TEMPORARY FILE
+        # =================================================
+
         if os.path.exists(file_path):
 
             os.remove(file_path)
 
 
 # =========================================================
-# GET MY VOICE PROFILE
+# GET MY VOICE
 # =========================================================
 
 @router.get("/my-voice")
 def get_my_voice(
+
     current_user=Depends(get_current_user)
+
 ):
 
     email = current_user["email"]
 
+
     voice = voice_collection.find_one(
-        {"email": email},
-        {"_id": 0}
+
+        {
+            "email": email
+        },
+
+        {
+            "_id": 0
+        }
+
     )
+
 
     if voice is None:
 
         return {
-            "message": "No voice found"
+
+            "message":
+            "No voice found"
+
         }
+
 
     return voice
 
 
 # =========================================================
-# DELETE VOICE PROFILE
+# DELETE VOICE
 # =========================================================
 
 @router.delete("/delete")
 def delete_voice(
+
     current_user=Depends(get_current_user)
+
 ):
 
     email = current_user["email"]
 
+
     voice = voice_collection.find_one(
-        {"email": email}
+
+        {
+            "email": email
+        }
+
     )
+
 
     if voice is None:
 
         return {
-            "message": "No voice found"
+
+            "message":
+            "No voice found"
+
         }
 
-    # Delete audio file
-    if os.path.exists(voice["path"]):
+
+    # =====================================================
+    # DELETE OLD AUDIO FILE
+    # =====================================================
+
+    if os.path.exists(
+
+        voice["path"]
+
+    ):
 
         os.remove(
+
             voice["path"]
+
         )
 
-    # Delete MongoDB record
+
+    # =====================================================
+    # DELETE DATABASE RECORD
+    # =====================================================
+
     voice_collection.delete_one(
-        {"email": email}
+
+        {
+            "email": email
+        }
+
     )
+
 
     return {
 
-        "message": "Voice deleted successfully"
+        "message":
+        "Voice deleted successfully"
 
     }
 
 
 # =========================================================
-# UPDATE VOICE PROFILE
+# UPDATE VOICE
 # =========================================================
 
 @router.put("/update")
 def update_voice(
+
     file: UploadFile = File(...),
+
     current_user=Depends(get_current_user)
+
 ):
 
     email = current_user["email"]
 
+
+    # =====================================================
+    # FIND OLD VOICE
+    # =====================================================
+
     old_voice = voice_collection.find_one(
-        {"email": email}
+
+        {
+            "email": email
+        }
+
     )
+
 
     if old_voice is None:
 
         return {
 
-            "message": "No voice found. Please create a voice profile first."
+            "message":
+            "No voice found. Please create your voice profile first."
 
         }
 
-    # Delete old audio
+
+    # =====================================================
+    # DELETE OLD AUDIO
+    # =====================================================
+
     old_path = old_voice["path"]
+
 
     if os.path.exists(old_path):
 
         os.remove(old_path)
 
-    # Delete old MongoDB record
+
+    # =====================================================
+    # DELETE OLD DATABASE RECORD
+    # =====================================================
+
     voice_collection.delete_one(
-        {"email": email}
+
+        {
+            "email": email
+        }
+
     )
 
-    # New file path
+
+    # =====================================================
+    # NEW FILE
+    # =====================================================
+
     file_path = os.path.join(
+
         UPLOAD_FOLDER,
+
         f"{email}_{file.filename}"
+
     )
 
-    # Save new audio
-    with open(file_path, "wb") as buffer:
+
+    # =====================================================
+    # SAVE NEW AUDIO
+    # =====================================================
+
+    with open(
+
+        file_path,
+
+        "wb"
+
+    ) as buffer:
 
         shutil.copyfileobj(
+
             file.file,
+
             buffer
+
         )
 
-    # Create NEW embedding
-    embedding = create_voice_embedding(
+
+    # =====================================================
+    # DETECT NEW REGISTERED PHRASE
+    # =====================================================
+
+    registered_phrase = speech_to_text(
+
         file_path
+
     )
 
-    # Save new profile
+
+    registered_phrase = registered_phrase.strip()
+
+
+    if not registered_phrase:
+
+        if os.path.exists(file_path):
+
+            os.remove(file_path)
+
+        return {
+
+            "message":
+            "Could not detect a voice phrase. Please record again."
+
+        }
+
+
+    # =====================================================
+    # CREATE NEW VOICE EMBEDDING
+    # =====================================================
+
+    embedding = create_voice_embedding(
+
+        file_path
+
+    )
+
+
+    # =====================================================
+    # SAVE NEW PROFILE
+    # =====================================================
+
     voice_collection.insert_one({
 
         "email": email,
@@ -346,14 +667,28 @@ def update_voice(
 
         "embedding": embedding,
 
-        "uploaded_at": datetime.now(UTC)
+        "phrase": registered_phrase,
+
+        "phrase_normalized":
+        normalize_phrase(
+            registered_phrase
+        ),
+
+        "uploaded_at":
+        datetime.now(UTC)
 
     })
 
+
     return {
 
-        "message": "Voice profile updated successfully",
+        "message":
+        "Voice profile updated successfully",
 
-        "file": file.filename
+        "file":
+        file.filename,
+
+        "phrase":
+        registered_phrase
 
     }

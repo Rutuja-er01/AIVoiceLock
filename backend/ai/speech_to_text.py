@@ -1,22 +1,45 @@
 import whisper
 
 print("Loading Whisper model...")
+
 model = whisper.load_model("base")
+
 print("Model loaded successfully!")
 
-PASS_PHRASE = "open the voice lock"
 
 def speech_to_text(audio_path):
-    result = model.transcribe(audio_path, fp16=False)
+    """
+    Convert audio to text using Whisper.
+    Returns:
+        matched -> not calculated here
+        text    -> detected spoken phrase
+    """
+
+    result = model.transcribe(
+        audio_path,
+        fp16=False
+    )
 
     text = result["text"].strip()
 
     print("Detected:", text)
 
-    # Normalize both strings
-    detected = text.lower().strip().replace(".", "")
-    expected = PASS_PHRASE.lower().strip().replace(".", "")
+    return text
 
-    matched = detected == expected
 
-    return matched, text
+def normalize_phrase(text):
+    """
+    Normalize phrase before comparison.
+    Removes punctuation and extra spaces.
+    """
+
+    text = text.lower().strip()
+
+    # Remove common punctuation
+    for character in [".", ",", "!", "?", ";", ":"]:
+        text = text.replace(character, "")
+
+    # Remove extra spaces
+    text = " ".join(text.split())
+
+    return text
